@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="/constans/header :: header"/>
+<div class="container">
+    <!--post-->
+    <div class="jumbotron">
+        <h1 th:text="${postDetails.getTitle()}">Tytuł</h1>
+        <div th:text="'Dodany: ' + ${#temporals.format(postDetails.getCreationDate(), 'dd-MM-yyyy')} + ' przez '">
+            Utworzony przez
+        </div>
+        <div><a th:text="${postDetails.getUser().getUsername()}"
+                th:href="@{/profile/ + ${postDetails.getUser().getUsername()}}">Autor</a></div>
+        <h3 class="panel-body" th:text="${postDetails.getContent()}">Treść</h3>
+        <div style="margin-left: 160px">
+            <div class="btn-group" style="width=80%"></div>
+            <div th:if="${userObject.getUserEntity().getId() == postDetails.getUser().getId()}">
+                <button th:onclick="'javascript:location.href =\'/deletePost/' + ${postDetails.getId()} + '\''"
+                        class="btn btn-danger" style="width:40%">Usuń post
+                </button>
+                <button th:onclick="'javascript:location.href =\'/editPost/' + ${postDetails.getId()} + '\''"
+                        class="btn btn-primary" style="width:40%">Edytuj post
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!--add comment-->
+    <div class="col-md-9" style="margin-left: auto; margin-right: auto">
+        <div th:if="${commentSuccess != null}" class="alert alert-success">
+            <strong th:text="${commentSuccess}"></strong>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Nowy kometarz</h4>
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <form action="#" th:action="@{'/comment/' + ${postDetails.getId()}}" method="post"
+                              th:object="${commentForm}">
+                            <div class="form-group row">
+                                <label class="col-4 col-form-label">Komentarz:</label>
+                                <div class="col-8">
+                                    <textarea th:field="*{text}" type="text" class="form-control"
+                                              placeholder="Komentarz"
+                                              cols="40" rows="4" required="required"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="offset-4 col-8">
+                                    <button name="submit" type="submit" class="btn btn-primary">Dodaj komentarz</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--all comments    -->
+    </div>
+    <h2>
+        <font color="red">Komentarze:</font>
+    </h2>
+    <div class="card card-body bg-light" th:each="comment : ${postDetails.getComments()}">
+        <h3 th:text="${comment.getText()}"></h3>
+        <div th:text="'Dodany: ' + ${#temporals.format(comment.getCreationDateComment(), 'dd-MM-yyyy')} + ' przez '">
+            Utworzony przez
+        </div>
+        <div><a th:text="${comment.getUser().getUsername()}"
+                th:href="@{/profile/ + ${comment.getUser().getUsername()}}">Autor</a></div>
+    </div>
+</div>
+<div th:replace="/constans/footer :: footer"/>
+</body>
+</html>
