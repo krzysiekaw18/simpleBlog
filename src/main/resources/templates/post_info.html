@@ -14,10 +14,10 @@
             Utworzony przez
         </div>
         <div><a th:text="${postDetails.getUser().getUsername()}"
-                th:href="@{/profile/ + ${postDetails.getUser().getUsername()}}">Autor</a></div>
+                th:href="@{'/blog/' + ${postDetails.getUser().getUsername()}}">Autor</a></div>
         <h3 class="panel-body" th:text="${postDetails.getContent()}">Treść</h3>
         <div style="margin-left: 160px">
-            <div class="btn-group" style="width=80%"></div>
+            <div class="btn-group" style="width: 80%"></div>
             <div th:if="${userObject.getUserEntity().getId() == postDetails.getUser().getId()}">
                 <button th:onclick="'javascript:location.href =\'/deletePost/' + ${postDetails.getId()} + '\''"
                         class="btn btn-danger" style="width:40%">Usuń post
@@ -76,7 +76,7 @@
             Utworzony przez
         </div>
         <div><a th:text="${comment.getUser().getUsername()}"
-                th:href="@{/profile/ + ${comment.getUser().getUsername()}}">Autor</a></div>
+                th:href="@{'/blog/' + ${comment.getUser().getUsername()}}">Autor</a></div>
     </div>
 </div>
 <div th:replace="/constans/footer :: footer"/>

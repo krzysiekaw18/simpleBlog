@@ -30,10 +30,12 @@ public class SingleUserPostsController {
     public String postsSingleUser(@PathVariable("username") String username,
                                   Model model){
         Optional<UserEntity> user = authService.findByUsername(username);
-        if (user.isPresent()){
-            UserEntity userEntity = user.get();
+        if (!user.isPresent()){
+           return "redirect:/";
         }
         model.addAttribute("userObject", sessionService);
+        model.addAttribute("posts", postService.getAllPostSingleUser(username));
+        model.addAttribute("username", username);
         return "/users_posts";
     }
 }

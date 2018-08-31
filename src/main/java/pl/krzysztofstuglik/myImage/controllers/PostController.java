@@ -68,7 +68,7 @@ public class PostController {
     @GetMapping("/deletePost/{id}")
     public String deletePost(@PathVariable("id") int postId,
                              RedirectAttributes redirectAttributes) {
-        if (sessionService.isLogin() && sessionService.getUserEntity().getPosts()
+        if (sessionService.isLogin() && postService.getAllPostByLoggedUser()
                 .stream()
                 .anyMatch(s -> s.getId() == postId)) {
             postService.deletePost(postId);
@@ -86,9 +86,17 @@ public class PostController {
             postService.updatePost(postEntityOptional);
             model.addAttribute("userObject", sessionService);
             model.addAttribute("postForm", postEntityOptional);
-            model.addAttribute("postUpdated", "Post został zmieniony");
-            return "add_post";
+            return "edit_post";
         }
         return "redirect:/post/" + postId;
+    }
+
+    @PostMapping("/editPost/{id}")
+    public String post(@PathVariable("id") int postId,
+                       @ModelAttribute("postForm") PostForm postForm,
+                       RedirectAttributes redirectAttributes) {
+        postService.addPost(postForm);
+        redirectAttributes.addFlashAttribute("postUpdated", "Post został zmieniony");
+        return "redirect:/home";
     }
 }

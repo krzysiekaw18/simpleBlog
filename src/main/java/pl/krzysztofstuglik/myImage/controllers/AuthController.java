@@ -49,7 +49,7 @@ public class AuthController {
     public String logout(RedirectAttributes redirectAttributes) {
         sessionService.setLogin(false);
         sessionService.setUserEntity(null);
-        redirectAttributes.addFlashAttribute("infoLogout", "Zostałeś wylogowany");
+        redirectAttributes.addFlashAttribute("infoLogout", "Zostales wylogowany");
         return "redirect:/BestBlog";
     }
 
@@ -66,6 +66,9 @@ public class AuthController {
                            RedirectAttributes redirectAttributes,
                            Model model) {
         model.addAttribute("userObject", sessionService);
+        if (bindingResult.hasErrors()){
+            return "register";
+        }
         if (authService.findByUsername(registerForm.getUsername()).isPresent()) {
             bindingResult.rejectValue("username", "error.registerForm", "Podany login jest już zajęty");
             return "register";

@@ -8,6 +8,7 @@ import pl.krzysztofstuglik.myImage.models.repositories.PostRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -28,6 +29,7 @@ public class PostService {
 
     private PostEntity createEntityFromForm(PostForm postForm) {
         PostEntity postEntity = new PostEntity();
+        postEntity.setId(postForm.getId());
         postEntity.setTitle(postForm.getTitle());
         postEntity.setContent(postForm.getContent());
         postEntity.setUser(sessionService.getUserEntity());
@@ -36,6 +38,14 @@ public class PostService {
 
     public List<PostEntity> getAll() {
         return postRepository.findAllByOrderByIdDesc();
+    }
+
+    public List<PostEntity> getAllPostByLoggedUser(){
+        return postRepository.findAllByUser_Id(sessionService.getUserEntity().getId());
+    }
+
+    public List<PostEntity> getAllPostSingleUser(String username){
+        return postRepository.findAllByUser_Username(username);
     }
 
     public PostEntity getAllPostData(int id) {
@@ -52,7 +62,6 @@ public class PostService {
         postForm.setContent(entityOptional.get().getContent());
         return postForm;
     }
-
 
     public void deletePost(int postId) {
         postRepository.deleteById(postId);
