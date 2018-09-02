@@ -6,6 +6,7 @@ import pl.krzysztofstuglik.myImage.models.UserEntity;
 import pl.krzysztofstuglik.myImage.models.forms.RegisterForm;
 import pl.krzysztofstuglik.myImage.models.repositories.UserRepository;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.Optional;
 
 @Service
@@ -44,6 +45,19 @@ AuthService {
         userEntity.setEmail(registerForm.getEmail());
         userEntity.setPassword(registerForm.getPassword());
         return userRepository.save(userEntity);
+    }
+
+    public Iterable<UserEntity> getAllUsers(){
+        return userRepository.findAll();
+    }
+
+    public boolean tryToRegister(RegisterForm registerForm){
+        if (userRepository.existsByEmail(registerForm.getEmail()) || userRepository.existsByUsername(registerForm.getUsername())){
+            return false;
+        }
+        UserEntity userEntity = save(registerForm);
+        userRepository.save(userEntity);
+        return true;
     }
 
 }

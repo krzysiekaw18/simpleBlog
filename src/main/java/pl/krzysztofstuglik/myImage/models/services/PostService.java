@@ -49,8 +49,12 @@ public class PostService {
         return postRepository.findById(id).get();
     }
 
-    public Optional<PostEntity> getPost(int id) {
+    public Optional<PostEntity> getPostById(int id) {
         return postRepository.findById(id);
+    }
+
+    public Iterable<PostEntity> getAllPosts(){
+        return postRepository.findAllByOrderByIdDesc();
     }
 
     public PostForm updatePost(Optional<PostEntity> entityOptional) {
@@ -125,6 +129,12 @@ public class PostService {
         postRepository.save(postEntity);
     }
 
+    public void savePost(PostEntity postEntity){
+        postRepository.save(postEntity);
+    }
 
+    public void deletePostById(int id){
+        postRepository.deleteById(id);
+    }
 
 }

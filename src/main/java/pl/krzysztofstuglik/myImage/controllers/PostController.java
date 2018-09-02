@@ -82,7 +82,7 @@ public class PostController {
     public String editPost(@PathVariable("id") int postId,
                            Model model,
                            RedirectAttributes redirectAttributes) {
-        Optional<PostEntity> postEntityOptional = postService.getPost(postId);
+        Optional<PostEntity> postEntityOptional = postService.getPostById(postId);
         if (!sessionService.isLogin()){
             redirectAttributes.addFlashAttribute("notEditPost", "Edycja tylko dla zalogowanych!!!");
             return "redirect:/login";

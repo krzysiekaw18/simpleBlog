@@ -1,5 +1,6 @@
 package pl.krzysztofstuglik.myImage.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ public class UserEntity {
     private int id;
     private String username;
     private String email;
+    @JsonIgnore
     private String password;
 
     @Column(name = "user_comments")
@@ -27,10 +29,11 @@ public class UserEntity {
     @Column(name = "register_date")
     private LocalDateTime registerDate;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PostEntity> posts;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CommentEntity> comments;
 }

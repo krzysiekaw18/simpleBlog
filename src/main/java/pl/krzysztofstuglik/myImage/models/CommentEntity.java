@@ -1,5 +1,6 @@
 package pl.krzysztofstuglik.myImage.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import pl.krzysztofstuglik.myImage.models.UserEntity;
 
@@ -20,6 +21,7 @@ public class CommentEntity {
     private UserEntity user;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "post_id")
     private PostEntity post;
 

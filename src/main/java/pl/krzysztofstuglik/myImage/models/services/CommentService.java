@@ -64,4 +64,16 @@ public class CommentService {
     public void addDisLike(int postId){
         postService.decliningNumberOfLikes(postId);
     }
+
+    public Iterable<CommentEntity> getAllComments(){
+       return commentRepository.findAllByOrderByIdDesc();
+    }
+    public void saveComment(CommentEntity commentEntity){
+        commentRepository.save(commentEntity);
+    }
+
+    public void deleteCommentById(int id){
+        commentRepository.deleteById(id);
+    }
+
 }

@@ -14,6 +14,7 @@ import java.util.List;
 @Repository
 public interface PostRepository extends CrudRepository<PostEntity, Integer> {
     List<PostEntity> findAllByUser_Id(int userId);
+    List<PostEntity> findAllByOrderByIdDesc();
     Page<PostEntity> findByUserOrderByIdDesc(UserEntity userEntity, Pageable pageable);
     Page<PostEntity> findAllByOrderByIdDesc(Pageable pageable);
     Page<PostEntity> findAllByOrderByIdAsc(Pageable pageable);
