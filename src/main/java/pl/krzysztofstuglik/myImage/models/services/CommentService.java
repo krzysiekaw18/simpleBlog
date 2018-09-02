@@ -16,18 +16,21 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final SessionService sessionService;
     private final PostService postService;
+    private final UserService userService;
 
     @Autowired
-    public CommentService(CommentRepository commentRepository, SessionService sessionService, PostService postService) {
+    public CommentService(CommentRepository commentRepository, SessionService sessionService, PostService postService, UserService userService) {
         this.commentRepository = commentRepository;
         this.sessionService = sessionService;
         this.postService = postService;
+        this.userService = userService;
     }
 
     public void addComment(CommentForm commentForm, int postId){
         CommentEntity commentEntity = createCommentEntity(commentForm, postId);
         commentRepository.save(commentEntity);
         postService.growingNumberOfComments(postId);
+        userService.growingNumberOfUserComments();
     }
 
     private CommentEntity createCommentEntity(CommentForm commentForm, int postId) {
@@ -51,6 +54,7 @@ public class CommentService {
     public void deleteComment(int postId, int commentId){
         commentRepository.deleteById(commentId);
         postService.decliningNumberOfComments(postId);
+        userService.decliningNumberOfUserComments();
     }
 
     public void addLike(int postId){

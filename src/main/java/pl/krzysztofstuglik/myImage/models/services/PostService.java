@@ -11,22 +11,24 @@ import pl.krzysztofstuglik.myImage.models.repositories.PostRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class PostService {
 
     private final PostRepository postRepository;
     private final SessionService sessionService;
+    private final UserService userService;
 
     @Autowired
-    public PostService(PostRepository postRepository, SessionService sessionService) {
+    public PostService(PostRepository postRepository, SessionService sessionService, UserService userService) {
         this.postRepository = postRepository;
         this.sessionService = sessionService;
+        this.userService = userService;
     }
 
     public void addPost(PostForm postForm) {
         PostEntity postEntity = createEntityFromForm(postForm);
+        userService.growingNumberOfUserPosts();
         postRepository.save(postEntity);
     }
 
@@ -60,15 +62,36 @@ public class PostService {
 
     public void deletePost(int postId) {
         postRepository.deleteById(postId);
+        userService.decliningNumberOfUserPosts();
     }
 
 
-    public Page<PostEntity> findAllOrderedByDataPageable(int page) {
+    public Page<PostEntity> findAllOrderedByDataDesc(int page) {
         return postRepository.findAllByOrderByIdDesc(PageRequest.of(subtractPageByOne(page), 5));
+    }
+
+    public Page<PostEntity> findAllOrderedByDataAsc(int page) {
+        return postRepository.findAllByOrderByIdAsc(PageRequest.of(subtractPageByOne(page), 5));
     }
 
     public Page<PostEntity> findByUserOrderedByDatePageable(UserEntity userEntity, int page) {
         return postRepository.findByUserOrderByIdDesc(userEntity, (PageRequest.of(subtractPageByOne(page), 5)));
+    }
+
+    public Page<PostEntity> findAllOrderByLikesDesc(int page){
+        return postRepository.findAllByOrderByNumberOfLikesDesc(PageRequest.of(subtractPageByOne(page), 5));
+    }
+
+    public Page<PostEntity> findAllOrderByLikesAsc(int page){
+        return postRepository.findAllByOrderByNumberOfLikesAsc(PageRequest.of(subtractPageByOne(page), 5));
+    }
+
+    public Page<PostEntity> findAllOrderByCommentsDesc(int page){
+        return postRepository.findAllByOrderByNumberOfCommentsDesc(PageRequest.of(subtractPageByOne(page), 5));
+    }
+
+    public Page<PostEntity> findAllOrderByCommentsAsc(int page){
+        return postRepository.findAllByOrderByNumberOfCommentsAsc(PageRequest.of(subtractPageByOne(page), 5));
     }
 
     private int subtractPageByOne(int page) {

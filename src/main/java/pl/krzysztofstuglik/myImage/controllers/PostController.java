@@ -80,11 +80,16 @@ public class PostController {
 
     @GetMapping("/editPost/{id}")
     public String editPost(@PathVariable("id") int postId,
-                           Model model) {
+                           Model model,
+                           RedirectAttributes redirectAttributes) {
         Optional<PostEntity> postEntityOptional = postService.getPost(postId);
+        if (!sessionService.isLogin()){
+            redirectAttributes.addFlashAttribute("notEditPost", "Edycja tylko dla zalogowanych!!!");
+            return "redirect:/login";
+        }
         if (postEntityOptional.isPresent()) {
             postService.updatePost(postEntityOptional);
-            model.addAttribute("userObject", sessionService);
+            model.addAttribute("userObject", sessionService.getUserEntity());
             model.addAttribute("postForm", postEntityOptional);
             return "edit_post";
         }
