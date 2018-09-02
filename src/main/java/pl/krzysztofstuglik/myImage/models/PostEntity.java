@@ -19,11 +19,13 @@ public class PostEntity {
     private String content;
     @Column(name = "creation_time")
     private LocalDateTime creationDate;
+    @Column(name = "number_comments")
+    private int numberOfComments;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<CommentEntity> comments;
 }

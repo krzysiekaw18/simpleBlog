@@ -39,16 +39,8 @@ public class PostService {
         return postEntity;
     }
 
-    public List<PostEntity> getAll() {
-        return postRepository.findAllByOrderByIdDesc();
-    }
-
     public List<PostEntity> getAllPostByLoggedUser(){
         return postRepository.findAllByUser_Id(sessionService.getUserEntity().getId());
-    }
-
-    public List<PostEntity> getAllPostSingleUser(String username){
-        return postRepository.findAllByUser_Username(username);
     }
 
     public PostEntity getAllPostData(int id) {
@@ -82,4 +74,17 @@ public class PostService {
     public Page<PostEntity> findByUserOrderedByDatePageable(UserEntity userEntity, int page) {
         return postRepository.findByUserOrderByIdDesc(userEntity, (PageRequest.of(subtractPageByOne(page), 5)));
     }
+
+    public void growingNumberOfComments(int postId){
+        PostEntity postEntity = getAllPostData(postId);
+        postEntity.setNumberOfComments(postEntity.getNumberOfComments() + 1);
+        postRepository.save(postEntity);
+    }
+
+    public void decliningNumberOfComments(int postId) {
+        PostEntity postEntity = getAllPostData(postId);
+        postEntity.setNumberOfComments(postEntity.getNumberOfComments() - 1);
+        postRepository.save(postEntity);
+    }
+
 }

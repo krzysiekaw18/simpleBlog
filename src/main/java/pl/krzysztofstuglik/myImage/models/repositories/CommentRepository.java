@@ -6,5 +6,4 @@ import pl.krzysztofstuglik.myImage.models.CommentEntity;
 import java.util.List;
 
 public interface CommentRepository extends CrudRepository<CommentEntity, Integer> {
-    List<CommentEntity> findAllByPost_Id(int postId);
 }

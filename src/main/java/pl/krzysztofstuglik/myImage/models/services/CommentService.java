@@ -8,21 +8,26 @@ import pl.krzysztofstuglik.myImage.models.UserEntity;
 import pl.krzysztofstuglik.myImage.models.forms.CommentForm;
 import pl.krzysztofstuglik.myImage.models.repositories.CommentRepository;
 
+import java.util.Optional;
+
 @Service
 public class CommentService {
 
     private final CommentRepository commentRepository;
     private final SessionService sessionService;
+    private final PostService postService;
 
     @Autowired
-    public CommentService(CommentRepository commentRepository, SessionService sessionService) {
+    public CommentService(CommentRepository commentRepository, SessionService sessionService, PostService postService) {
         this.commentRepository = commentRepository;
         this.sessionService = sessionService;
+        this.postService = postService;
     }
 
     public void addComment(CommentForm commentForm, int postId){
         CommentEntity commentEntity = createCommentEntity(commentForm, postId);
         commentRepository.save(commentEntity);
+        postService.growingNumberOfComments(postId);
     }
 
     private CommentEntity createCommentEntity(CommentForm commentForm, int postId) {
@@ -39,7 +44,12 @@ public class CommentService {
         return commentEntity;
     }
 
-    public void deleteComment(int cemmentId){
-        commentRepository.deleteById(cemmentId);
+    public Optional<CommentEntity> getCommentById(int commentId){
+        return commentRepository.findById(commentId);
+    }
+
+    public void deleteComment(int postId, int commentId){
+        commentRepository.deleteById(commentId);
+        postService.decliningNumberOfComments(postId);
     }
 }

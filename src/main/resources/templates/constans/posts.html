@@ -5,18 +5,26 @@
 
 <div th:fragment="posts">
     <div class="container">
-    <div class="starter-template panel" th:each="post : ${changePage.postEntities}">
-        <div class="panel-heading">
-           <h1><a th:href="@{'/post/' + ${post.getId()}}" th:text="${post.getTitle()}">Tytuł</a></h1>
-            <div th:text="'Dodany: ' + ${#temporals.format(post.getCreationDate(), 'dd-MM-yyyy')} + ' przez '">Utworzony przez</div>
-            <div>
-                <div><a th:text="${post.getUser().getUsername()}" th:href="@{'/blog/' + ${post.getUser().getUsername()}}">Autor</a></div>
+        <div class="starter-template panel" th:each="post : ${changePage.postEntities}">
+            <div class="panel-heading">
+                <h1><a th:href="@{'/post/' + ${post.getId()}}" th:text="${post.getTitle()}" style="color: darkblue">Tytuł</a></h1>
+                <div th:if="${userObject.isLogin()}"
+                     th:text="'Dodany: ' + ${#temporals.format(post.getCreationDate(), 'dd-MM-yyyy')} + ' przez '">
+                    Utworzony przez
+                </div>
+                <div th:if="${userObject.isLogin()}">
+                    <div><a th:href="@{'/blog/' + ${post.getUser().getUsername()}}"><strong
+                            th:text="${post.getUser().getUsername()}" style="color: darkblue">Autor</strong></a></div>
+                </div>
             </div>
+            <h3 class="panel-body" th:text="${post.getContent()}">Treść</h3>
+            <div th:if="${userObject.isLogin()}">
+                <a th:href="@{'/post/' + ${post.getId()}}"><strong
+                        th:text="'Liczba komentarzy: ' + ${post.getNumberOfComments()}" style="color: green">Liczba komentarzy</strong></a>
+            </div>
+            <br>
+            <hr>
         </div>
-        <h3 class="panel-body" th:text="${post.getContent()}">Treść</h3>
-        <br>
-        <hr>
-    </div>
     </div>
 </div>
 </body>
