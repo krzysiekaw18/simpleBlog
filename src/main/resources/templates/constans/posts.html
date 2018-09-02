@@ -5,7 +5,7 @@
 
 <div th:fragment="posts">
     <div class="container">
-    <div class="starter-template panel" th:each="post : ${posts}">
+    <div class="starter-template panel" th:each="post : ${changePage.postEntities}">
         <div class="panel-heading">
            <h1><a th:href="@{'/post/' + ${post.getId()}}" th:text="${post.getTitle()}">Tytuł</a></h1>
             <div th:text="'Dodany: ' + ${#temporals.format(post.getCreationDate(), 'dd-MM-yyyy')} + ' przez '">Utworzony przez</div>
@@ -17,8 +17,7 @@
         <br>
         <hr>
     </div>
-
-</div>
+    </div>
 </div>
 </body>
 </html>

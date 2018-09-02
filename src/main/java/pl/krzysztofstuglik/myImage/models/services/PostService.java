@@ -1,8 +1,11 @@
 package pl.krzysztofstuglik.myImage.models.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import pl.krzysztofstuglik.myImage.models.PostEntity;
+import pl.krzysztofstuglik.myImage.models.UserEntity;
 import pl.krzysztofstuglik.myImage.models.forms.PostForm;
 import pl.krzysztofstuglik.myImage.models.repositories.PostRepository;
 
@@ -65,5 +68,18 @@ public class PostService {
 
     public void deletePost(int postId) {
         postRepository.deleteById(postId);
+    }
+
+
+    public Page<PostEntity> findAllOrderedByDataPageable(int page) {
+        return postRepository.findAllByOrderByIdDesc(PageRequest.of(subtractPageByOne(page), 5));
+    }
+
+    private int subtractPageByOne(int page) {
+        return (page < 1) ? 0 : page - 1;
+    }
+
+    public Page<PostEntity> findByUserOrderedByDatePageable(UserEntity userEntity, int page) {
+        return postRepository.findByUserOrderByIdDesc(userEntity, (PageRequest.of(subtractPageByOne(page), 5)));
     }
 }

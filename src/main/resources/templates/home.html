@@ -19,7 +19,11 @@
         <strong th:text="${postUpdated}"></strong>
     </div>
 </div>
+
 <div th:replace="/constans/posts :: posts"/>
+
+<div th:replace="/constans/pagination :: pagination(URLparameter='/home')"/>
+
 <div th:replace="/constans/footer :: footer"/>
 </body>
 </html>
