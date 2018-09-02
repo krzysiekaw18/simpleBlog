@@ -7,7 +7,8 @@
     <div class="container">
         <div class="starter-template panel" th:each="post : ${changePage.postEntities}">
             <div class="panel-heading">
-                <h1><a th:href="@{'/post/' + ${post.getId()}}" th:text="${post.getTitle()}" style="color: darkblue">Tytuł</a></h1>
+                <h1><a th:href="@{'/post/' + ${post.getId()}}" th:text="${post.getTitle()}" style="color: darkblue">Tytuł</a>
+                </h1>
                 <div th:if="${userObject.isLogin()}"
                      th:text="'Dodany: ' + ${#temporals.format(post.getCreationDate(), 'dd-MM-yyyy')} + ' przez '">
                     Utworzony przez
@@ -20,7 +21,10 @@
             <h3 class="panel-body" th:text="${post.getContent()}">Treść</h3>
             <div th:if="${userObject.isLogin()}">
                 <a th:href="@{'/post/' + ${post.getId()}}"><strong
-                        th:text="'Liczba komentarzy: ' + ${post.getNumberOfComments()}" style="color: green">Liczba komentarzy</strong></a>
+                        th:text="'Liczba komentarzy: ' + ${post.getNumberOfComments()}" style="color: green">Liczba
+                    komentarzy</strong></a>
+                &nbsp;
+                <strong th:text="'Liczba polubień: ' + ${post.getNumberOfLikes()}" style="color: indigo"></strong>
             </div>
             <br>
             <hr>

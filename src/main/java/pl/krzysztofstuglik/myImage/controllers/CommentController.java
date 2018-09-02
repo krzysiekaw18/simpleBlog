@@ -29,7 +29,7 @@ public class CommentController {
         this.postService = postService;
         this.authService = authService;
     }
-    
+
     @PostMapping("/comment/{postId}")
     public String comment(@PathVariable("postId") int postId,
                           @ModelAttribute("commentForm") CommentForm commentForm,
@@ -52,6 +52,30 @@ public class CommentController {
             return "redirect:/post/" + postId;
         }
         redirectAttributes.addFlashAttribute("notYourComment", "Nie możesz usuwać komentarzy innych użytkowników");
+        return "redirect:/post/" + postId;
+    }
+
+    @GetMapping("/addLike/{postId}")
+    public String addLike(@PathVariable("postId") int postId,
+                          Model model){
+        if (!sessionService.isLogin()){
+            model.addAttribute("addRateFailed", "Aby polubić post musisz się zalogować");
+            return "redirect:/login";
+        }
+        commentService.addLike(postId);
+        model.addAttribute("postDetails", postService.getAllPostData(postId));
+        return "redirect:/post/" + postId;
+    }
+
+    @GetMapping("/addDisLike/{postId}")
+    public String addDisLike(@PathVariable("postId") int postId,
+                             Model model){
+        if (!sessionService.isLogin()){
+            model.addAttribute("addRateFailed", "Aby polubić post musisz się zalogować");
+            return "redirect:/login";
+        }
+        commentService.addDisLike(postId);
+        model.addAttribute("postDetails", postService.getAllPostData(postId));
         return "redirect:/post/" + postId;
     }
 

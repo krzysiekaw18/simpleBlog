@@ -14,6 +14,9 @@
     </h2>
 </div>
 <div style="width: 400px; margin-top: 10px; margin-left: auto; margin-right: auto">
+    <div th:if="${addRateFailed != null}" class="alert alert-danger">
+        <strong th:text="${addRateFailed}"></strong>
+    </div>
     <div th:if="${infoNotLoginComment != null}" class="alert alert-danger">
         <strong th:text="${infoNotLoginComment}"></strong>
     </div>

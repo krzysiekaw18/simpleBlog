@@ -17,10 +17,15 @@ public class PostEntity {
     private int id;
     private String title;
     private String content;
+
     @Column(name = "creation_time")
     private LocalDateTime creationDate;
+
     @Column(name = "number_comments")
     private int numberOfComments;
+
+    @Column(name = "number_likes")
+    private int numberOfLikes;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

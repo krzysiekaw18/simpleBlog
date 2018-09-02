@@ -8,11 +8,11 @@
 <div th:replace="/constans/header :: header"/>
 <div class="container">
     <!--info-->
-    <div  style="text-align: center" th:if="${commentDeleted != null}" class="alert alert-success">
+    <div style="text-align: center" th:if="${commentDeleted != null}" class="alert alert-success">
         <strong th:text="${commentDeleted}"></strong>
     </div>
     <div style="text-align: center" th:if="${notYourComment != null}" class="alert alert-danger">
-        <strong th:text="${notYourComment}" ></strong>
+        <strong th:text="${notYourComment}"></strong>
     </div>
     <!--post-->
     <div class="jumbotron">
@@ -20,11 +20,27 @@
         <div th:text="'Dodany: ' + ${#temporals.format(postDetails.getCreationDate(), 'dd-MM-yyyy')} + ' przez '">
             Utworzony przez
         </div>
-        <div><a th:text="${postDetails.getUser().getUsername()}"
-                th:href="@{'/blog/' + ${postDetails.getUser().getUsername()}}">Autor</a></div>
+        <div>
+            <a th:text="${postDetails.getUser().getUsername()}"
+               th:href="@{'/blog/' + ${postDetails.getUser().getUsername()}}">Autor</a></div>
         <h3 class="panel-body" th:text="${postDetails.getContent()}">Treść</h3>
+        <div>
+            <h4>
+                <strong th:text="'Liczba polubień: ' + ${postDetails.getNumberOfLikes()}"
+                        style="color: greenyellow">
+                </strong>
+            </h4>
+        </div>
         <div style="margin-left: 160px">
             <div class="btn-group" style="width: 80%"></div>
+            <div th:if="${userObject.getUserEntity().getId() != postDetails.getUser().getId()}">
+                <button th:onclick="'javascript:location.href =\'/addLike/' + ${postDetails.getId()} + '\''"
+                        class="btn btn-success" style="width:40%">Podoba mi się
+                </button>
+                <button th:onclick="'javascript:location.href =\'/addDisLike/' + ${postDetails.getId()} + '\''"
+                        class="btn btn-danger" style="width:40%">Nie podoba mi się
+                </button>
+            </div>
             <div th:if="${userObject.getUserEntity().getId() == postDetails.getUser().getId()}">
                 <button th:onclick="'javascript:location.href =\'/deletePost/' + ${postDetails.getId()} + '\''"
                         class="btn btn-danger" style="width:40%">Usuń post
@@ -36,7 +52,8 @@
         </div>
     </div>
     <!--add comment-->
-    <div class="col-md-9" style="margin-left: auto; margin-right: auto">
+    <div class="col-md-9" style="margin-left: auto; margin-right: auto"
+         th:if="${userObject.getUserEntity().getId() != postDetails.getUser().getId()}">
         <div th:if="${commentSuccess != null}" class="alert alert-success">
             <strong th:text="${commentSuccess}"></strong>
         </div>
@@ -72,8 +89,8 @@
             </div>
         </div>
     </div>
-        <!--all comments    -->
-        <h2>
+    <!--all comments    -->
+    <h2>
         <font color="green">Komentarze:</font>
     </h2>
     <div class="card card-body bg-light" th:each="comment : ${postDetails.getComments()}">

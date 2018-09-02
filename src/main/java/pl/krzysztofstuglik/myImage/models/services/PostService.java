@@ -67,12 +67,12 @@ public class PostService {
         return postRepository.findAllByOrderByIdDesc(PageRequest.of(subtractPageByOne(page), 5));
     }
 
-    private int subtractPageByOne(int page) {
-        return (page < 1) ? 0 : page - 1;
-    }
-
     public Page<PostEntity> findByUserOrderedByDatePageable(UserEntity userEntity, int page) {
         return postRepository.findByUserOrderByIdDesc(userEntity, (PageRequest.of(subtractPageByOne(page), 5)));
+    }
+
+    private int subtractPageByOne(int page) {
+        return (page < 1) ? 0 : page - 1;
     }
 
     public void growingNumberOfComments(int postId){
@@ -86,5 +86,22 @@ public class PostService {
         postEntity.setNumberOfComments(postEntity.getNumberOfComments() - 1);
         postRepository.save(postEntity);
     }
+
+    public void growingNumberOfLikes(int postId){
+        PostEntity postEntity = getAllPostData(postId);
+        postEntity.setNumberOfLikes(postEntity.getNumberOfLikes() + 1);
+        postRepository.save(postEntity);
+    }
+
+    public void decliningNumberOfLikes(int postId){
+        PostEntity postEntity = getAllPostData(postId);
+        postEntity.setNumberOfLikes(postEntity.getNumberOfLikes() - 1);
+        if (postEntity.getNumberOfLikes() < 0){
+            postEntity.setNumberOfLikes(0);
+        }
+        postRepository.save(postEntity);
+    }
+
+
 
 }

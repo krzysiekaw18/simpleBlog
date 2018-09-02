@@ -52,4 +52,12 @@ public class CommentService {
         commentRepository.deleteById(commentId);
         postService.decliningNumberOfComments(postId);
     }
+
+    public void addLike(int postId){
+        postService.growingNumberOfLikes(postId);
+    }
+
+    public void addDisLike(int postId){
+        postService.decliningNumberOfLikes(postId);
+    }
 }
