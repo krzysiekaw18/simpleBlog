@@ -89,7 +89,7 @@ public class PostController {
         }
         if (postEntityOptional.isPresent()) {
             postService.updatePost(postEntityOptional);
-            model.addAttribute("userObject", sessionService.getUserEntity());
+            model.addAttribute("userObject", sessionService);
             model.addAttribute("postForm", postEntityOptional);
             return "edit_post";
         }
