@@ -5,6 +5,7 @@ This application was created using:
 1. Spring MVC
 2. Hibernate, MySql database
 3. Thymeleaf, Bootstrap
+
 4.Lombok
 
 There is a login and registration functionality included.
